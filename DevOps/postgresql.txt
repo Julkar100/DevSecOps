@@ -1,0 +1,4 @@
+sudo apt-get update && apt-get upgrade -y
+sudo apt install postgresql postgresql-contrib -y
+sudo systemctl status postgresql
+

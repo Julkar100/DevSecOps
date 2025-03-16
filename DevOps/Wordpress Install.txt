@@ -1,0 +1,41 @@
+apt update ; apt -y install docker.io docker-compose mariadb-client apt-transport-https ca-certificates curl gnupg-agent software-properties-common nginx -y
+docker --version ; docker-compose --version
+
+docker pull mariadb
+mkdir ~/wordpress ; mkdir -p ~/wordpress/database ; mkdir -p ~/wordpress/html
+
+docker run -e MYSQL_ROOT_PASSWORD=root-password -e MYSQL_USER=wpuser -e
+MYSQL_PASSWORD=password -e MYSQL_DATABASE=wpdb -v /root/wordpress/database:/var/lib/mysql --name wordpressdb -d mariadb
+
+docker pull wordpress:latest
+
+docker run -e WORDPRESS_DB_USER=wpuser \
+  -e WORDPRESS_DB_PASSWORD=password \
+  -e WORDPRESS_DB_NAME=wpdb \
+  -p 8081:80 \
+  -v /root/wordpress/html:/var/www/html \
+  --link wordpressdb:mysql \
+  --name wpcontainer \
+  -d wordpress
+
+nano /etc/nginx/sites-available/wordpress
+
+server {
+  listen 80;
+  server_name 192.168.228.140;
+  location / {
+    proxy_pass http://localhost:8081;
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+  }
+}
+
+
+systemctl restart nginx
+
+for local pc
+http://192.168.228.140:8081/wp-admin/install.php
+
+
+https://portforwarded.com/install-wordpress-on-ubuntu-22-04-lts-lamp-stack/

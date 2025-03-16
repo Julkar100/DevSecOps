@@ -1,0 +1,5 @@
+follow this instruction 
+
+https://documentation.wazuh.com/current/quickstart.html
+
+https://documentation.wazuh.com/current/index.html

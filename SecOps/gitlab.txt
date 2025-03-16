@@ -1,0 +1,53 @@
+sudo apt-get update && apt-get upgrade -y
+sudo apt-get install -y curl openssh-server ca-certificates tzdata perl
+cd /tmp
+sudo apt install gitlab-ee
+nano /etc/gitlab/gitlab.rb
+clear
+gitlab-ctl reconfigure
+nano /etc/gitlab/initial_root_password
+nano /etc/gitlab/gitlab.rb
+cd
+reboot
+clear
+ip a
+clear
+cd /tmp
+ls
+gitlab-ctl reconfigure
+less /tmp/script.deb.sh
+bash /tmp/script.deb.sh
+clear
+cd .
+cd
+sudo apt-get install -y curl openssh-server ca-certificates tzdata perl
+cd /tmp
+curl https://packages.gitlab.com/install/repositories/gitlab/gitlab-ee/script.deb.sh | sudo bash
+bash /tmp/script.deb.sh
+ls
+less /tmp/script.deb.sh
+curl -LO https://packages.gitlab.com/install/repositories/gitlab/gitlab-ee/script.deb.sh
+ls
+cd
+ls
+cd /tmp
+ls
+curl -LO https://packages.gitlab.com/install/repositories/gitlab/gitlab-ee/script.deb.sh
+ls
+less /tmp/script.deb.sh
+bash /tmp/script.deb.sh
+sudo apt install gitlab-ee
+ufw status
+ufw allow http
+ufw allow https
+ufw allow OpenSSH
+nano /etc/gitlab/gitlab.rb
+gitlab-ctl reconfigure
+nano /etc/gitlab/initial_root_password
+reboot
+clear
+historu
+history
+
+4+RnZeyTuA1qx/rWpKTf+fGqdsWvW9fRRiurkin0ePc=
+4+RnZeyTuA1qx/rWpKTf+fGqdsWvW9fRRiurkin0ePc=

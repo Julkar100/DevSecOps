@@ -1,0 +1,30 @@
+
+Install process
+
+sudo apt update
+sudo apt install apache2
+sudo ufw app list
+sudo ufw allow 'Apache'
+sudo ufw status
+sudo systemctl status apache2
+
+Manage Process
+
+sudo systemctl stop apache2
+sudo systemctl start apache2
+sudo systemctl restart apache2
+sudo systemctl reload apache2
+sudo systemctl disable apache2
+sudo systemctl enable apache2
+
+
+sudo mkdir /var/www/your_domain
+sudo chown -R $USER:$USER /var/www/your_domain
+sudo chmod -R 755 /var/www/your_domain
+sudo nano /var/www/your_domain/index.html
+
+
+Web resource
+
+
+https://www.digitalocean.com/community/tutorials/how-to-install-the-apache-web-server-on-ubuntu-20-04

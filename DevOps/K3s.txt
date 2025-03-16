@@ -1,0 +1,22 @@
+sudo apt update && sudo apt upgrade -y
+curl -sfL https://get.k3s.io | sh -
+sudo systemctl status k3s
+k3s --version
+kubectl get nodes
+kubectl create deployment <Node Name> --image=nginx
+kubectl get pods
+kubectl expose deployment <Node Name> --type=NodePort --port=80
+kubectl get service nginx
+
+--------Manage Purpose-------
+export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
+
+sudo systemctl stop k3s
+sudo systemctl restart k3s
+
+--------Uninstall---------
+/usr/local/bin/k3s-uninstall.sh
+
+
+
+Machine ip:10.209.99.16

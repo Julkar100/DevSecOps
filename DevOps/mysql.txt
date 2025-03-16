@@ -1,0 +1,22 @@
+sudo apt install mysql-server
+
+sudo service mysql status
+
+sudo ss -tap | grep mysql
+
+sudo service mysql restart
+
+
+sudo journalctl -u mysql
+
+bind-address            = 10.209.99.16
+
+
+sudo systemctl restart mysql.service
+
+
+Web Documentation 
+
+https://documentation.ubuntu.com/server/how-to/databases/install-mysql/index.html2
+
+https://www.digitalocean.com/community/tutorials/how-to-install-mysql-on-ubuntu-22-04

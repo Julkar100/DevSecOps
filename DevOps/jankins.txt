@@ -1,0 +1,22 @@
+sudo apt-get update && apt-get upgrade -y
+sudo apt install fontconfig openjdk-17-jre -y
+java -version
+sudo wget -O /usr/share/keyrings/jenkins-keyring.asc \
+  https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
+echo "deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc]" \
+  https://pkg.jenkins.io/debian-stable binary/ | sudo tee \
+  /etc/apt/sources.list.d/jenkins.list > /dev/null
+sudo apt-get update
+sudo apt-get install jenkins -y
+port change purpose
+cd /usr/lib/systemd/system
+Must be open those port which port expose ex:8383
+sudo ufw allow 8383/tcp
+sudo systemctl enable jenkins
+sudo systemctl start jenkins
+sudo systemctl status jenkins
+cat /var/lib/jenkins/secrets/initialAdminPassword
+
+
+
+f4b98df5e1dea102aee86262d58188f6b4f14dff15b94f0468c61fbb3a582b6c

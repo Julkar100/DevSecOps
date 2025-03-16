@@ -1,0 +1,238 @@
+MySQL Support for SonarQube is depricated. 
+Increase the vm.max_map_count kernal,
+file discriptor and ulimit for current session at runtime.
+sysctl -w vm.max_map_count=524288
+sysctl -w fs.file-max=131072
+ulimit -n 131072
+ulimit -u 8192
+
+To Increase the vm.max_map_count kernal ,file discriptor and ulimit permanently. 
+Open the below config file and Insert the below value as shown below,
+sudo nano /etc/security/limits.conf
+
+Add This 
+
+sonarqube   -   nofile   65536
+sonarqube   -   nproc    4096
+
+
+sudo apt-get update && sudo apt-get upgrade -y
+
+File unzip Purpose
+
+sudo apt-get install wget unzip -y
+
+Java Development Kit Where have JDK&JRE
+
+sudo apt-get install openjdk-17-jdk -y
+sudo apt-get install openjdk-17-jre -y
+
+Check java Version
+
+java --version
+
+Add postgree Sql
+sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" >> /etc/apt/sources.list.d/pgdg.list'
+
+wget -q https://www.postgresql.org/media/keys/ACCC4CF8.asc -O - | sudo apt-key add -
+
+
+Install Command
+
+sudo apt-get -y install postgresql postgresql-contrib
+
+sudo systemctl start postgresql
+
+sudo systemctl enable postgresql
+
+sudo systemctl status postgresql
+
+Change the password for the default PostgreSQL user.
+
+sudo passwd postgres
+
+Switch to the postgres user.
+
+su - postgres
+
+createuser sonar
+
+psql
+
+ALTER USER sonar WITH ENCRYPTED password 'sonar';
+
+CREATE DATABASE sonarqube OWNER sonar;
+
+grant all privileges on DATABASE sonarqube to sonar;
+
+\q
+
+exit
+
+
+Downloaded Path
+cd /tmp
+
+sudo wget https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-9.9.0.65466.zip
+
+sudo unzip sonarqube-9.9.0.65466.zip -d /opt
+
+sudo mv /opt/sonarqube-9.9.0.65466 /opt/sonarqube
+Step #4:Configure SonarQube on Ubuntu 22.04 LTS
+
+
+Create Group and User for SoanrQube
+
+sudo groupadd sonar
+
+sudo useradd -c "user to run SonarQube" -d /opt/sonarqube -g sonar sonar 
+
+sudo chown sonar:sonar /opt/sonarqube -R
+
+sudo nano /opt/sonarqube/conf/sonar.properties
+Find the following lines.
+
+sonar.jdbc.username=sonar
+sonar.jdbc.password=sonar
+sonar.jdbc.url=jdbc:postgresql://localhost:5432/sonarqube
+Edit the sonar script file and set Run as user
+
+sudo nano /opt/sonarqube/bin/linux-x86-64/sonar.sh
+
+/opt/sonarqube/bin/linux-x86-64/sonar.sh
+
+
+
+ RUN_AS_USER=sonar
+Type CTRL+X to save and close the file.
+
+2. Start SonarQube:
+Now to start  SonarQube we need to do following: Switch to sonar user
+
+ sudo su sonar
+Move to the script directory
+
+ cd /opt/sonarqube/bin/linux-x86-64/
+Run the script to start SonarQube
+
+./sonar.sh start
+Output:
+
+Starting SonarQube...
+
+Started SonarQube
+We can also add this in service and can run as a service.
+
+3. Check SonarQube Running Status:
+To check if sonaqube is running enter below command,
+
+./sonar.sh status
+Output:
+
+sonar@fosstechnix:~/bin/linux-x86-64$ ./sonar.sh status
+
+SonarQube is running (9490).
+
+
+
+3. Check SonarQube Running Status:
+To check if sonaqube is running enter below command,
+
+./sonar.sh status
+Output:
+
+sonar@fosstechnix:~/bin/linux-x86-64$ ./sonar.sh status
+
+SonarQube is running (9490).
+4. SonarQube Logs:
+To check  sonarqube logs, navigate to /opt/sonarqube/logs/sonar.log directory
+
+ tail /opt/sonarqube/logs/sonar.log
+Output:
+
+INFO  app[][o.s.a.ProcessLauncherImpl] Launch process[[key='ce', ipcIndex=3, logFilenamePrefix=ce]] from [/opt/sonarqube]: /usr/lib/jvm/java-11-openjdk-amd64/bin/java -Djava.awt.headless=true -Dfile.encoding=UTF-8 -Djava.io.tmpdir=/opt/sonarqube/temp --add-opens=java.base/java.util=ALL-UNNAMED -Xmx512m -Xms128m -XX:+HeapDumpOnOutOfMemoryError -Dhttp.nonProxyHosts=localhost|127.*|[::1] -cp ./lib/common/*:/opt/sonarqube/lib/jdbc/h2/h2-1.3.176.jar org.sonar.ce.app.CeServer /opt/sonarqube/temp/sq-process15059956114837198848properties
+
+ INFO  app[][o.s.a.SchedulerImpl] Process[ce] is up
+
+ INFO  app[][o.s.a.SchedulerImpl] SonarQube is up
+using about output you will see that sonaqube is up and running successfully.
+
+Step #5:Configure Systemd service
+First stop the SonarQube service as we started manually using above steps Navigate to the SonarQube installed path
+
+ cd /opt/sonarqube/bin/linux-x86-64/
+Run the script to start SonarQube
+
+./sonar.sh stop
+Create a systemd service file for SonarQube to run as System Startup.
+
+ sudo nano /etc/systemd/system/sonar.service
+Add the below lines,
+
+/etc/systemd/system/sonar.service
+
+[Unit]
+Description=SonarQube service
+After=syslog.target network.target
+
+[Service]
+Type=forking
+
+ExecStart=/opt/sonarqube/bin/linux-x86-64/sonar.sh start
+ExecStop=/opt/sonarqube/bin/linux-x86-64/sonar.sh stop
+
+User=sonar
+Group=sonar
+Restart=always
+
+LimitNOFILE=65536
+LimitNPROC=4096
+
+[Install]
+WantedBy=multi-user.target
+Save and close the file. Now stop the sonarqube script earlier we started to run using as daemon. Start the Sonarqube daemon by running:
+
+sudo systemctl start sonar
+
+sudo systemctl enable sonar
+
+sudo systemctl status sonar
+
+Step #6: Access SonarQube
+
+http://server_IP:9000 OR http://localhost:9000
+Login to SonarQube  with default administrator username and password is admin.
+
+sonarqube-web-interface
+
+sudo nano /opt/sonarqube/conf/sonar.properties
+
+/opt/sonarqube/conf/sonar.properties
+
+# Binding IP address. For servers with more than one IP address, this property specifies which
+
+# address will be used for listening on the specified ports.
+
+# By default, ports will be used on all IP addresses associated with the server.
+
+sonar.web.host=0.0.0.0
+
+
+# Web context. When set, it must start with forward slash (for example /sonarqube).
+
+# The default value is root context (empty value).
+
+#sonar.web.context=
+
+# TCP port for incoming HTTP connections. Default value is 9000.
+
+sonar.web.port=9000
+
+
+
+Follow This Document
+
+https://www.fosstechnix.com/how-to-install-sonarqube-on-ubuntu-22-04-lts/
+
+
+

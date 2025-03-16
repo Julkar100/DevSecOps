@@ -1,0 +1,7 @@
+wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-6.2.1.4610-linux-x64.zip
+sudo apt-get install unzip
+unzip sonar-scanner-cli-6.2.1.4610-linux-x64.zip
+sudo mv sonar-scanner-6.2.1.4610-linux-x64/ /opt/sonar-scanner
+echo 'export PATH=$PATH:/opt/sonar-scanner/bin' >> ~/.bashrc
+source ~/.bashrc
+sonar-scanner -v
